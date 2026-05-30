@@ -8,7 +8,7 @@
 </head>
       
       <style>
-        /* Color Variables & Base System */
+    /* Color Variables & Base System */
 :root {
     --bg-primary: #f8fafc;
     --bg-card: #ffffff;
@@ -31,6 +31,11 @@
     --accent-light: #312e81;
 }
 
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 85px; /* Keeps target headers perfectly visible below sticky header bar */
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -43,6 +48,18 @@ body {
     color: var(--text-main);
     line-height: 1.7;
     transition: background-color 0.3s, color 0.3s;
+}
+
+/* Reading Progress Indicator Mechanics */
+.progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 4px;
+    background-color: #b4c6fc;
+    width: 0%;
+    z-index: 2000;
+    transition: width 0.1s ease-out;
 }
 
 /* Header & Top Bar */
@@ -67,6 +84,29 @@ header {
 
 .logo span { color: #b4c6fc; }
 
+/* Control Button Groups Inside Navigation Header */
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-controls button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+.header-controls button:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
 .theme-toggle {
     cursor: pointer;
     font-size: 1.3rem;
@@ -79,6 +119,27 @@ header {
     display: flex;
     max-width: 1400px;
     margin: 0 auto;
+}
+
+/* Sidebar Search Utility Area */
+.search-box {
+    margin-bottom: 20px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 9px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-main);
+    outline: none;
+    font-size: 0.9rem;
+    transition: border-color 0.2s;
+}
+
+.search-box input:focus {
+    border-color: var(--php-purple);
 }
 
 /* Responsive Sticky Sidebar */
@@ -116,6 +177,7 @@ header {
     flex: 1;
     padding: 40px;
     max-width: 900px;
+    transition: font-size 0.2s ease;
 }
 
 .hero {
@@ -153,6 +215,57 @@ header {
     margin-bottom: 10px;
 }
 
+/* Visual Architecture Pipeline Diagram Component */
+.pipeline-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-primary);
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 25px;
+    gap: 10px;
+}
+
+.pipeline-step {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    flex: 1;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.pipeline-step:hover {
+    transform: translateY(-4px);
+    border-color: var(--php-purple);
+}
+
+.step-icon {
+    font-size: 1.8rem;
+    margin-bottom: 6px;
+}
+
+.pipeline-step h4 {
+    font-size: 0.85rem;
+    color: var(--php-purple);
+    margin-bottom: 4px;
+}
+
+.pipeline-step p {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.3;
+}
+
+.pipeline-arrow {
+    font-size: 1.3rem;
+    color: var(--php-purple);
+    font-weight: bold;
+}
+
 /* Code block highlight syntax styling */
 pre {
     background-color: var(--code-bg);
@@ -163,8 +276,35 @@ pre {
     font-family: 'Fira Code', Consolas, Monaco, monospace;
     font-size: 0.95rem;
     margin: 20px 0;
+    position: relative; /* Essential for absolute alignment tracking of Copy-utility overlays */
 }
 .code-comment { color: #565f89; font-style: italic; }
+
+/* Interactive Copy Code Component Action Overlays */
+.copy-code-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #a9b1d6;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.copy-code-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.copy-code-btn.copied {
+    background: var(--php-purple);
+    color: #ffffff;
+    border-color: var(--php-purple);
+}
 
 blockquote {
     background: var(--accent-light);
@@ -173,6 +313,16 @@ blockquote {
     margin: 20px 0;
     border-radius: 0 8px 8px 0;
     color: var(--text-main);
+}
+
+.content-section ul {
+    margin-left: 22px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.content-section ul li {
+    margin-bottom: 6px;
 }
 
 /* Tabular Visualizer Components */
@@ -274,12 +424,6 @@ table th {
     font-weight: 600;
 }
 
-/* Mobile Responsiveness Adjustments */
-@media(max-width: 768px) {
-    .wrapper { flex-direction: column; }
-    .sidebar { width: 100%; height: auto; position: relative; top: 0; border-right: none; border-bottom: 1px solid var(--border-color); }
-    .content { padding: 20px; }
-}
 /* Playground Layout Grid */
 .playground-container {
     display: grid;
@@ -344,6 +488,39 @@ table th {
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
 }
 
+/* Float Up Button Element */
+#scrollTopBtn {
+    display: none;
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 99;
+    border: none;
+    outline: none;
+    background-color: var(--php-purple);
+    color: white;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 50%;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+#scrollTopBtn:hover {
+    background-color: var(--php-dark-purple);
+    transform: scale(1.1);
+}
+
+/* Mobile Responsiveness Adjustments */
+@media(max-width: 768px) {
+    .wrapper { flex-direction: column; }
+    .sidebar { width: 100%; height: auto; position: relative; top: 0; border-right: none; border-bottom: 1px solid var(--border-color); }
+    .content { padding: 20px; }
+    .pipeline-container { flex-direction: column; gap: 15px; }
+    .pipeline-arrow { transform: rotate(90deg); margin: 2px 0; }
+}
+
 /* Responsive adjustments for smaller screens */
 @media(max-width: 900px) {
     .playground-container {
@@ -358,39 +535,54 @@ table th {
 
 <body>
 
-    <!-- Header Navigation -->
+<div id="readingProgress" class="progress-bar"></div>
+
     <header>
         <div class="logo">PHP<span>Mastery</span></div>
-        <div class="theme-toggle" id="themeToggle" title="Toggle Dark/Light Mode">🌓</div>
+        <div class="header-controls">
+            <button id="decreaseFont" title="Decrease Font Size">A-</button>
+            <button id="increaseFont" title="Increase Font Size">A+</button>
+            <div class="theme-toggle" id="themeToggle" title="Toggle Dark/Light Mode">🌓</div>
+        </div>
     </header>
 
-    <!-- Main Container Layout -->
     <div class="wrapper">
         
-        <!-- Sidebar Navigation -->
         <aside class="sidebar">
+            <div class="search-box">
+                <input type="text" id="docSearch" placeholder="Search topics...">
+            </div>
             <nav>
                 <ul>
                     <li><a href="#about" class="nav-link active">What is PHP?</a></li>
                     <li><a href="#architecture" class="nav-link">How it Works</a></li>
-                    <li><a href="#syntax" class="nav-link">Core Syntax</a></li>
+                    <li><a href="#variables" class="nav-link">Variables</a></li>
+                    <li><a href="#data-types" class="nav-link">Data Types</a></li>
+                    <li><a href="#operators" class="nav-link">Operators</a></li>
+                    <li><a href="#conditions" class="nav-link">Conditions (if/else)</a></li>
+                    <li><a href="#loops" class="nav-link">Loops</a></li>
+                    <li><a href="#functions" class="nav-link">Functions</a></li>
+                    <li><a href="#arrays" class="nav-link">Arrays</a></li>
+                    <li><a href="#forms" class="nav-link">Forms Handling</a></li>
+                    <li><a href="#mysql" class="nav-link">MySQL Database</a></li>
+                    <li><a href="#oop" class="nav-link">OOP Concepts</a></li>
+                    <li><a href="#mvc" class="nav-link">MVC Architecture</a></li>
+                    <li><a href="#laravel" class="nav-link">Laravel Introduction</a></li>
                     <li><a href="#comparison" class="nav-link">PHP vs JavaScript</a></li>
+                    <li><a href="#playground" class="nav-link">Code Playground</a></li>
                     <li><a href="#quiz" class="nav-link">Test Your Knowledge</a></li>
                     <li><a href="#feedback" class="nav-link">Feedback</a></li>
                 </ul>
             </nav>
         </aside>
 
-        <!-- Main Content Area -->
         <main class="content">
             
-            <!-- Hero Banner -->
             <section class="hero">
                 <h1>Deep Dive into PHP</h1>
                 <p>Learn the world's most popular server-side scripting language from scratch.</p>
             </section>
 
-            <!-- Section 1: What is PHP -->
             <section id="about" class="content-section">
                 <h2>What is PHP?</h2>
                 <p><strong>PHP</strong> (Hypertext Preprocessor) is an open-source, server-side scripting language explicitly engineered for web development. It can be easily embedded directly within HTML markup.</p>
@@ -399,7 +591,6 @@ table th {
                 </blockquote>
             </section>
 
-            <!-- Section 2: Architecture -->
             <section id="architecture" class="content-section">
                 <h2>How PHP Works (Server-Side Architecture)</h2>
                 <p>When a browser requests a page containing PHP, the process follows these structured steps:</p>
@@ -409,9 +600,34 @@ table th {
                     <li><strong>Execution:</strong> PHP runs the logic, fetches data from databases (like MySQL) if required, and generates raw HTML.</li>
                     <li><strong>Response:</strong> The server returns pure HTML back to your browser. Your browser never sees the original PHP source code.</li>
                 </ol>
+
+                <div class="pipeline-container">
+                    <div class="pipeline-step" id="step-client">
+                        <div class="step-icon">💻</div>
+                        <h4>1. Client Browser</h4>
+                        <p>Requests <code>index.php</code></p>
+                    </div>
+                    <div class="pipeline-arrow">➔</div>
+                    <div class="pipeline-step" id="step-server">
+                        <div class="step-icon">⚙️</div>
+                        <h4>2. Web Server</h4>
+                        <p>Routes file to PHP Engine</p>
+                    </div>
+                    <div class="pipeline-arrow">➔</div>
+                    <div class="pipeline-step" id="step-php">
+                        <div class="step-icon">🐘</div>
+                        <h4>3. PHP Engine</h4>
+                        <p>Runs code & pulls Database records</p>
+                    </div>
+                    <div class="pipeline-arrow">➔</div>
+                    <div class="pipeline-step" id="step-render">
+                        <div class="step-icon">🌐</div>
+                        <h4>4. HTML Output</h4>
+                        <p>Plain HTML sent back to user</p>
+                    </div>
+                </div>
             </section>
 
-            <!-- Section 3: Core Syntax -->
             <section id="syntax" class="content-section">
                 <h2>Core Syntax & Variables</h2>
                 <p>PHP files contain text, HTML, CSS, JavaScript, and PHP code. A standard block begins with <code>&lt;?php</code> and wraps up with <code>?&gt;</code>.</p>
@@ -428,7 +644,124 @@ function welcomeMessage($name) {
 echo welcomeMessage($site_name);</code></pre>
             </section>
 
-            <!-- Section 4: Comparison Table -->
+            <section id="variables" class="content-section">
+                <h2>Variables</h2>
+                <p>In PHP, variables serve as containers for storing values. A variable is created the absolute moment you first assign a value to it.</p>
+                <pre><code>$txt = "Learning PHP";
+$x = 5;
+$y = 10.5;</code></pre>
+            </section>
+
+            <section id="data-types" class="content-section">
+                <h2>Data Types</h2>
+                <p>PHP variables can store different classifications of data values. The primary types supported include:</p>
+                <ul>
+                    <li><strong>String:</strong> Ordered sequence of text character elements wrapped inside matching quotes.</li>
+                    <li><strong>Integer:</strong> Whole number integers completely clear of any fractional floating-decimal values.</li>
+                    <li><strong>Float:</strong> Fixed point numbers carrying fractional components or decimal notations.</li>
+                    <li><strong>Boolean:</strong> Truth states taking on either absolute <code>true</code> or <code>false</code> flags.</li>
+                    <li><strong>Null:</strong> Distinct marker representing empty datasets assigned to unset variable allocations.</li>
+                </ul>
+            </section>
+
+            <section id="operators" class="content-section">
+                <h2>Operators</h2>
+                <p>Operators represent programmatic symbols telling execution engines to step through mathematical, comparative, or logical evaluation routines.</p>
+                <pre><code>$sum = $x + $y;        // Arithmetic Assignment
+$isEqual = ($x == $y);  // Comparison check returning standard true/false
+$x++;                   // Value Incrementing operation</code></pre>
+            </section>
+
+            <section id="conditions" class="content-section">
+                <h2>Conditions (if/else)</h2>
+                <p>Conditional syntax controls execution pathways depending upon computed results evaluated out of criteria comparisons.</p>
+                <pre><code>$t = date("H");
+
+if ($t < "20") {
+  echo "Have a good day!";
+} else {
+  echo "Have a good night!";
+}</code></pre>
+            </section>
+
+            <section id="loops" class="content-section">
+                <h2>Loops</h2>
+                <p>Loops sequentially repeat code blocks as long as underlying conditional criteria configurations hold true states.</p>
+                <pre><code>$i = 1;
+while($i <= 5) {
+  echo "The iteration number is: $i <br>";
+  $i++;
+}</code></pre>
+            </section>
+
+            <section id="functions" class="content-section">
+                <h2>Functions</h2>
+                <p>Functions represent logical packages of parameterized runtime blocks that you write once to recall cleanly across applications.</p>
+                <pre><code>function writeMessage($name) {
+  return "Hello " . $name . ", welcome back!";
+}
+
+echo writeMessage("Alex");</code></pre>
+            </section>
+
+            <section id="arrays" class="content-section">
+                <h2>Arrays</h2>
+                <p>An array stores multiple key-to-value structure clusters bounded contextually beneath one name identifier framework.</p>
+                <pre><code>// Working with an Associative Array layout mapping distinct tracking values
+$age = array("Peter"=>"35", "Ben"=>"37", "Joe"=>"43");
+echo "Ben is " . $age['Ben'] . " years old.";</code></pre>
+            </section>
+
+            <section id="forms" class="content-section">
+                <h2>Forms Handling</h2>
+                <p>Form processing intercepts string metrics safely packed from incoming browser submittals using global tracking variables like <code>$_POST</code> collection vectors.</p>
+                <pre><code>// Intercepting data fields securely via clean string checks
+$name = htmlspecialchars($_POST['fname']);
+echo "Processed backend form data input: " . $name;</code></pre>
+            </section>
+
+            <section id="mysql" class="content-section">
+                <h2>MySQL Database Connections</h2>
+                <p>PHP uses PHP Data Objects (PDO) handlers to connect code to storage servers to query datasets securely using prepared inputs.</p>
+                <pre><code>try {
+  $conn = new PDO("mysql:host=$server;dbname=myDB", $user, $pass);
+  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  echo "Database pipeline linked successfully!";
+} catch(PDOException $e) {
+  echo "Connection failed error: " . $e->getMessage();
+}</code></pre>
+            </section>
+
+            <section id="oop" class="content-section">
+                <h2>Object-Oriented Programming (OOP)</h2>
+                <p>OOP groups software into entities called Classes, joining properties together with local execution rules into distinct objects.</p>
+                <pre><code>class Car {
+  public $color;
+  public function __construct($color) {
+    $this->color = $color;
+  }
+}
+
+$myCar = new Car("red");</code></pre>
+            </section>
+
+            <section id="mvc" class="content-section">
+                <h2>Model-View-Controller (MVC) Concept</h2>
+                <p>The MVC design pattern keeps logical systems clean by segregating application engineering spaces into three distinct pieces:</p>
+                <ul>
+                    <li><strong>Model:</strong> Core logic handling absolute properties, state constraints, and direct database storage pipelines.</li>
+                    <li><strong>View:</strong> Display structures tracking frontend UI layer styling and client presentation files.</li>
+                    <li><strong>Controller:</strong> Interface routers parsing incoming context metrics, updates, and routing data targets between Models and Views.</li>
+                </ul>
+            </section>
+
+            <section id="laravel" class="content-section">
+                <h2>Laravel Framework Introduction</h2>
+                <p><strong>Laravel</strong> is a modern web framework that simplifies app creation by providing built-in routing modules, abstract entity objects (Eloquent ORM), and secure identity validations.</p>
+                <pre><code>// A standard Laravel mapping endpoint matching a routing controller call
+Route::get('/profile', [UserController::class, 'showProfile']);</code></pre>
+            </section>
+
             <section id="comparison" class="content-section">
                 <h2>PHP vs Client-Side JavaScript</h2>
                 <p>Both languages are vital to modern web environments, but they serve completely different environments:</p>
@@ -468,7 +801,33 @@ echo welcomeMessage($site_name);</code></pre>
                 </div>
             </section>
 
-            <!-- Section 5: Interactive Quiz -->
+            <section id="playground" class="content-section">
+                <h2>Interactive Front-End Playground</h2>
+                <p>PHP's job is to output HTML, CSS, and JavaScript to the browser. Try writing some front-end code below to see how the browser renders it in real-time!</p>
+                
+                <div class="playground-container">
+                    <div class="editor-area">
+                        <div class="panel">
+                            <label>HTML / Content</label>
+                            <textarea id="htmlCode" placeholder="Enter HTML here..."><h1>Hello from the Frontend!</h1>&#10;<p>Type something here to update the live preview panel on the right.</p></textarea>
+                        </div>
+                        <div class="panel">
+                            <label>CSS / Styling</label>
+                            <textarea id="cssCode" placeholder="Enter CSS here...">h1 { color: #4F5D95; }&#10;p { font-style: italic; color: #64748b; }</textarea>
+                        </div>
+                        <div class="panel">
+                            <label>JavaScript / Interactivity</label>
+                            <textarea id="jsCode" placeholder="Enter JavaScript here...">// Click the preview text to see this run!&#10;document.body.addEventListener('click', () => {&#10;  console.log('Playground clicked!');&#10;});</textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="preview-area">
+                        <label>Live Output Preview</label>
+                        <iframe id="previewWindow"></iframe>
+                    </div>
+                </div>
+            </section>
+
             <section id="quiz" class="content-section card-quiz">
                 <h2>Interactive Quiz</h2>
                 <p>Test your conceptual understanding of PHP below:</p>
@@ -483,7 +842,6 @@ echo welcomeMessage($site_name);</code></pre>
                 </div>
             </section>
 
-            <!-- Section 6: Contact/Feedback Form -->
             <section id="feedback" class="content-section">
                 <h2>Have Questions? Drop a Line</h2>
                 <form id="contactForm" class="feedback-form">
@@ -507,36 +865,11 @@ echo welcomeMessage($site_name);</code></pre>
         </main>
     </div>
 
-    <section id="playground" class="content-section">
-    <h2>Interactive Front-End Playground</h2>
-    <p>PHP's job is to output HTML, CSS, and JavaScript to the browser. Try writing some front-end code below to see how the browser renders it in real-time!</p>
-    
-    <div class="playground-container">
-        <div class="editor-area">
-            <div class="panel">
-                <label>HTML / Content</label>
-                <textarea id="htmlCode" placeholder="Enter HTML here..."><h1>Hello from the Frontend!</h1>&#10;<p>Type something here to update the live preview panel on the right.</p></textarea>
-            </div>
-            <div class="panel">
-                <label>CSS / Styling</label>
-                <textarea id="cssCode" placeholder="Enter CSS here...">h1 { color: #4F5D95; }&#10;p { font-style: italic; color: #64748b; }</textarea>
-            </div>
-            <div class="panel">
-                <label>JavaScript / Interactivity</label>
-                <textarea id="jsCode" placeholder="Enter JavaScript here...">// Click the preview text to see this run!&#10;document.body.addEventListener('click', () => {&#10;  console.log('Playground clicked!');&#10;});</textarea>
-            </div>
-        </div>
-        
-        <div class="preview-area">
-            <label>Live Output Preview</label>
-            <iframe id="previewWindow"></iframe>
-        </div>
-    </div>
-</section>
+    <button id="scrollTopBtn" title="Go to top">▲</button>
 
     <script>
 
-        document.addEventListener("DOMContentLoaded", () => {
+       document.addEventListener("DOMContentLoaded", () => {
     
     // --- 1. Dark & Light Mode Toggle System ---
     const themeToggle = document.getElementById("themeToggle");
@@ -583,20 +916,162 @@ echo welcomeMessage($site_name);</code></pre>
     const contactForm = document.getElementById("contactForm");
     const successMessage = document.getElementById("formSuccess");
 
-    contactForm.addEventListener("submit", (e) => {
-        e.preventDefault(); // Stop standard browser page reloads
+    if (contactForm) {
+        contactForm.addEventListener("submit", (e) => {
+            e.preventDefault(); // Stop standard browser page reloads
+            
+            // Simulating processing logic...
+            successMessage.style.display = "block";
+            contactForm.reset(); // Wipe all form inputs clear safely
+            
+            setTimeout(() => {
+                successMessage.style.display = "none";
+            }, 5000);
+        });
+    }
+
+    // --- 4. Live Documentation Search Menu Filter ---
+    const searchInput = document.getElementById('docSearch');
+
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const navItems = document.querySelectorAll('.sidebar nav ul li');
+
+            navItems.forEach(item => {
+                const linkText = item.querySelector('a').innerText.toLowerCase();
+                if (linkText.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    }
+
+    // --- 5. Add Copy Buttons to Code Blocks ---
+    const codeBlocks = document.querySelectorAll('pre');
+
+    codeBlocks.forEach((block) => {
+        // Create the button element
+        const copyBtn = document.createElement('button');
+        copyBtn.innerText = 'Copy';
+        copyBtn.className = 'copy-code-btn';
         
-        // Simulating processing logic...
-        successMessage.style.display = "block";
-        contactForm.reset(); // Wipe all form inputs clear safely
-        
-        setTimeout(() => {
-            successMessage.style.display = "none";
-        }, 5000);
+        // Ensure parent tracking wrapper context is explicitly set
+        block.style.position = 'relative';
+        block.appendChild(copyBtn);
+
+        copyBtn.addEventListener('click', () => {
+            const codeElement = block.querySelector('code');
+            // Extract text cleanly, discarding utility button text contents
+            const codeText = codeElement.innerText;
+            
+            navigator.clipboard.writeText(codeText).then(() => {
+                copyBtn.innerText = 'Copied! ✅';
+                copyBtn.classList.add('copied');
+                
+                // Reset button visual state after a brief moment
+                setTimeout(() => {
+                    copyBtn.innerText = 'Copy';
+                    copyBtn.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Could not copy syntax block: ', err);
+            });
+        });
     });
+
+    // --- 6. Reading Progress Tracker Viewport Sync ---
+    const progressBar = document.getElementById('readingProgress');
+
+    if (progressBar) {
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            progressBar.style.width = scrolled + '%';
+        });
+    }
+
+    // --- 7. Accessibility Font Scaling System ---
+    let currentFontSize = 100; // Baseline percentages scale framework
+    const contentArea = document.querySelector('.content');
+    const increaseFontBtn = document.getElementById('increaseFont');
+    const decreaseFontBtn = document.getElementById('decreaseFont');
+
+    if (contentArea && increaseFontBtn && decreaseFontBtn) {
+        increaseFontBtn.addEventListener('click', () => {
+            if (currentFontSize < 130) { // Safety ceiling cap limit
+                currentFontSize += 5;
+                contentArea.style.fontSize = currentFontSize + '%';
+            }
+        });
+
+        decreaseFontBtn.addEventListener('click', () => {
+            if (currentFontSize > 85) { // Safety floor deck limit
+                currentFontSize -= 5;
+                contentArea.style.fontSize = currentFontSize + '%';
+            }
+        });
+    }
+
+    // --- 8. Scroll to Top Interface Action Manager ---
+    const scrollTopBtn = document.getElementById("scrollTopBtn");
+
+    if (scrollTopBtn) {
+        window.addEventListener('scroll', () => {
+            // Unhide float asset when view frame goes beyond 400 pixels deep
+            if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
+                scrollTopBtn.style.display = "block";
+            } else {
+                scrollTopBtn.style.display = "none";
+            }
+        });
+
+        scrollTopBtn.addEventListener("click", () => {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        });
+    }
+
+    // --- 9. Live Code Playground Compiler ---
+    const htmlEditor = document.getElementById('htmlCode');
+    const cssEditor = document.getElementById('cssCode');
+    const jsEditor = document.getElementById('jsCode');
+
+    function updatePlayground() {
+        if (!htmlEditor || !cssEditor || !jsEditor) return;
+
+        const html = htmlEditor.value;
+        const css = `<style>${cssEditor.value}</style>`;
+        const js = `<script>${jsEditor.value}<\/script>`;
+        
+        const previewFrame = document.getElementById('previewWindow');
+        if (previewFrame) {
+            const previewWindow = previewFrame.contentWindow.document;
+            previewWindow.open();
+            // Combine structure, styles, and scripts into the isolated frame context
+            previewWindow.write(html + css + js);
+            previewWindow.close();
+        }
+    }
+
+    if (htmlEditor && cssEditor && jsEditor) {
+        // Attach input listeners to update live preview instantly as the user types
+        htmlEditor.addEventListener('input', updatePlayground);
+        cssEditor.addEventListener('input', updatePlayground);
+        jsEditor.addEventListener('input', updatePlayground);
+
+        // Initialize playground compilation stack pass on layout paint load
+        updatePlayground();
+    }
 });
 
-// --- 4. Quiz Logic Handler Function ---
+// --- 10. Quiz Logic Handler Function ---
+// (Kept outside initialization flow since it is called inline via HTML onclick properties)
 function checkAnswer(isCorrect, element) {
     const feedbackBox = document.getElementById("quiz-feedback");
     const buttons = element.parentElement.querySelectorAll(".quiz-btn");
@@ -618,27 +1093,6 @@ function checkAnswer(isCorrect, element) {
         feedbackBox.style.color = "#ef4444";
     }
 }
-    // --- 8. Live Code Playground Compiler ---
-function updatePlayground() {
-    const html = document.getElementById('htmlCode').value;
-    const css = `<style>${document.getElementById('cssCode').value}</style>`;
-    const js = `<script>${document.getElementById('jsCode').value}<\/script>`;
-    
-    const previewWindow = document.getElementById('previewWindow').contentWindow.document;
-    
-    previewWindow.open();
-    // Combine structure, styles, and scripts into the isolated frame context
-    previewWindow.write(html + css + js);
-    previewWindow.close();
-}
-
-// Attach input listeners to update live preview instantly as the user types
-document.getElementById('htmlCode').addEventListener('input', updatePlayground);
-document.getElementById('cssCode').addEventListener('input', updatePlayground);
-document.getElementById('jsCode').addEventListener('input', updatePlayground);
-
-// Initialize playground on first load
-updatePlayground();
     </script>
 </body>
 </html>
